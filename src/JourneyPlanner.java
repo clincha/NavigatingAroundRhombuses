@@ -1,8 +1,18 @@
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JourneyPlanner {
+  private static final int RHOMBOIDS = 16;
+
   public static void main(Vertex[] args) {
     Vertex start = new Vertex(19, 18);    /* default start state */
     Vertex finish = new Vertex(21, 10);    /* default finish state */
@@ -20,13 +30,36 @@ public class JourneyPlanner {
   }
 
   public List<Vertex> nextConfigs(Vertex state) {
-    ArrayList<Vertex> vertices = new ArrayList<>(9);
-    for (int i = -1; i < 2; i++) {
-      for (int j = -1; j < 2; j++) {
-        vertices.add(new Vertex(state.get_x() + i, state.get_y() + j));
+    Rhombus[] rhombuses = getRhombuses();
+    return Arrays.stream(rhombuses).map(Rhombus::getVertices).flatMap(Stream::of).collect(Collectors.toList());
+  }
+
+  private Rhombus[] getRhombuses() {
+    Rhombus[] rhombuses = new Rhombus[RHOMBOIDS];
+
+    File rhombusCSV = new File("src/rhombus.csv");
+
+    try {
+      BufferedReader bufferedReader = new BufferedReader(new FileReader(rhombusCSV));
+      Matcher[] matchers = new Matcher[4];
+      for (int i = 0; i < matchers.length; i++) {
+        matchers[i] = Pattern.compile("(\\d+), (\\d+)").matcher(bufferedReader.readLine());
       }
+
+      for (int i = 0; i < RHOMBOIDS; i++) {
+        Vertex[] rhombusVertices = new Vertex[4];
+        for (int j = 0; j < 4; j++) {
+          if (matchers[j].find()) {
+            rhombusVertices[j] = new Vertex(Integer.parseInt(matchers[j].group(1)), Integer.parseInt(matchers[j].group(2)));
+          }
+        }
+        rhombuses[i] = new Rhombus(rhombusVertices);
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    return vertices;
+    return rhombuses;
   }
 
   public LinkedList<Vertex> iterativeDeepening(Vertex first, Vertex last) {
