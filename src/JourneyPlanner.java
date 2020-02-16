@@ -1,11 +1,11 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class JourneyPlanner {
-  public static void main(String args[]) {
-    String start = "rye";    /* default start state */
-    String finish = "tent";    /* default finish state */
+  public static void main(Vertex[] args) {
+    Vertex start = new Vertex(19, 18);    /* default start state */
+    Vertex finish = new Vertex(21, 10);    /* default finish state */
 
     if (args.length >= 1) {
       start = args[0];
@@ -15,89 +15,38 @@ public class JourneyPlanner {
     }
 
     JourneyPlanner planner = new JourneyPlanner();
-    LinkedList<String> route = planner.iterativeDeepening(start, finish);
+    LinkedList<Vertex> route = planner.iterativeDeepening(start, finish);
     System.out.println("route = " + route);
   }
 
-  public List<String> nextConfigs(String state) {
-    switch (state) {
-      case "ash":
-        return Arrays.asList("chart", "fav", "folk", "harr", "hy", "nr", "rye", "tent");
-      case "bar":
-        return Arrays.asList("cant", "dov", "folk");
-      case "cant":
-        return Arrays.asList("bar", "chart", "fav", "sand", "st", "whit");
-      case "chart":
-        return Arrays.asList("ash", "cant", "harr");
-      case "cran":
-        return Arrays.asList("hast", "maid");
-      case "deal":
-        return Arrays.asList("dov", "sand");
-      case "dov":
-        return Arrays.asList("bar", "deal", "folk", "sand");
-      case "dung":
-        return Arrays.asList();
-      case "fav":
-        return Arrays.asList("ash", "cant", "whit");
-      case "folk":
-        return Arrays.asList("ash", "bar", "dov", "hy");
-      case "gill":
-        return Arrays.asList("graves", "sit");
-      case "graves":
-        return Arrays.asList("gill", "maid");
-      case "harr":
-        return Arrays.asList("ash", "chart", "maid");
-      case "hast":
-        return Arrays.asList("cran", "rye", "tent");
-      case "hb":
-        return Arrays.asList("mar", "st", "whit");
-      case "hy":
-        return Arrays.asList("ash", "folk", "nr");
-      case "maid":
-        return Arrays.asList("cran", "graves", "harr", "sit", "tent");
-      case "mar":
-        return Arrays.asList("hb", "rams", "st");
-      case "nr":
-        return Arrays.asList("ash", "hy", "rye");
-      case "rams":
-        return Arrays.asList("mar", "sand", "st");
-      case "rye":
-        return Arrays.asList("ash", "hast", "nr", "tent");
-      case "sand":
-        return Arrays.asList("cant", "deal", "dov", "rams");
-      case "sheer":
-        return Arrays.asList("sit");
-      case "sit":
-        return Arrays.asList("gill", "maid", "sheer");
-      case "st":
-        return Arrays.asList("cant", "hb", "mar", "rams");
-      case "tent":
-        return Arrays.asList("ash", "hast", "maid", "rye");
-      case "whit":
-        return Arrays.asList("cant", "fav", "hb");
-      default:
-        return null;
+  public List<Vertex> nextConfigs(Vertex state) {
+    ArrayList<Vertex> vertices = new ArrayList<>(9);
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        vertices.add(new Vertex(state.get_x() + i, state.get_y() + j));
+      }
     }
+    return vertices;
   }
 
-  public LinkedList<String> iterativeDeepening(String first, String last) {
+  public LinkedList<Vertex> iterativeDeepening(Vertex first, Vertex last) {
     for (int depth = 1; true; depth++) {
-      LinkedList<String> route = depthFirst(first, last, depth);
+      LinkedList<Vertex> route = depthFirst(first, last, depth);
       if (route != null) return route;
     }
   }
 
-  private LinkedList<String> depthFirst(String first, String last, int depth) {
+  private LinkedList<Vertex> depthFirst(Vertex first, Vertex last, int depth) {
     if (depth == 0) {
       return null;
     } else if (first.equals(last)) {
-      LinkedList<String> route = new LinkedList<String>();
+      LinkedList<Vertex> route = new LinkedList<>();
       route.add(first);
       return route;
     } else {
-      List<String> nexts = nextConfigs(first);
-      for (String next : nexts) {
-        LinkedList<String> route = depthFirst(next, last, depth - 1);
+      List<Vertex> nexts = nextConfigs(first);
+      for (Vertex next : nexts) {
+        LinkedList<Vertex> route = depthFirst(next, last, depth - 1);
         if (route != null) {
           route.addFirst(first);
           return route;
