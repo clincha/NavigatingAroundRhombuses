@@ -39,8 +39,8 @@ class JourneyPlannerTest {
     String startLine = bufferedReader.readLine();
     String endLine = bufferedReader.readLine();
 
-    Matcher startMatcher = Pattern.compile("(\\d), (\\d)").matcher(startLine);
-    Matcher endMatcher = Pattern.compile("(\\d), (\\d)").matcher(endLine);
+    Matcher startMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(startLine);
+    Matcher endMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(endLine);
 
     while (endMatcher.find() && startMatcher.find()) {
       startVertices.add(new Vertex(Integer.parseInt(startMatcher.group(1)), Integer.parseInt(startMatcher.group(2))));
@@ -50,6 +50,7 @@ class JourneyPlannerTest {
     for (int i = 0; i < PUZZLE_LENGTH; i++) {
       Vertex start = startVertices.get(i);
       Vertex finish = endVertices.get(i);
+
       LinkedList<Vertex> route = journeyPlanner.iterativeDeepening(start, finish);
 
       System.out.println(route);
