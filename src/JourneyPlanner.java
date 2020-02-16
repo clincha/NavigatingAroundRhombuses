@@ -31,7 +31,17 @@ public class JourneyPlanner {
 
   public List<Vertex> nextConfigs(Vertex state) {
     Rhombus[] rhombuses = getRhombuses();
-    return Arrays.stream(rhombuses).map(Rhombus::getVertices).flatMap(Stream::of).collect(Collectors.toList());
+    List<Vertex> vertices = Arrays.stream(rhombuses).map(Rhombus::getVertices).flatMap(Stream::of).collect(Collectors.toList());
+
+    for (Rhombus rhombus : rhombuses) {
+      for (Line line : rhombus.getLines()) {
+        vertices = vertices.stream()
+          .filter(vertex -> !Vertex.linesIntersect(state, vertex, line.getStart(), line.getEnd()))
+          .collect(Collectors.toList());
+      }
+    }
+
+    return vertices;
   }
 
   private Rhombus[] getRhombuses() {
