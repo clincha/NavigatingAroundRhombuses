@@ -40,7 +40,6 @@ public class JourneyPlanner {
           .collect(Collectors.toList());
       }
     }
-
     return vertices;
   }
 

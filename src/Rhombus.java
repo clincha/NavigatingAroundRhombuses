@@ -4,7 +4,6 @@ public class Rhombus {
 
   private Vertex[] vertices;
 
-
   public Rhombus(Vertex[] vertices) {
     this.vertices = vertices;
   }

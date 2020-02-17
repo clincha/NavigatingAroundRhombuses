@@ -7,29 +7,6 @@ public class Vertex implements Comparable<Vertex> {
     this.y = y;
   }
 
-  public int get_x() {
-    return x;
-  }
-
-  public int get_y() {
-    return y;
-  }
-
-  public int compareTo(Vertex v) {
-    if (v.get_x() == get_x()) {
-      return v.get_y() - get_y();
-    } else {
-      return v.get_x() - get_x();
-    }
-  }
-
-  public boolean equals(Object o) {
-    if (o instanceof Vertex) {
-      Vertex v = (Vertex) o;
-      return compareTo(v) == 0;
-    } else return false;
-  }
-
   public static boolean vertexIntersect(Vertex u, Vertex v1, Vertex v2) {
 	/* check whether the vertex u falls within a given line segment where
            the line segment connects vertices v1 and v2 (but does not include them) */
@@ -41,7 +18,7 @@ public class Vertex implements Comparable<Vertex> {
     int d = u.get_y() - v2.get_y();
 
 	/* check whether the simultaneous equations a mu = b and c mu = d
-           has a solution 0 < mu < 1 
+           has a solution 0 < mu < 1
            where a and c are coefficients of the variable mu
            where b and d are constants */
 
@@ -78,7 +55,7 @@ public class Vertex implements Comparable<Vertex> {
     int f = v2.get_y() - u2.get_y();
 
 	/* check whether the simultaneous equations a mu + b lambda = c and d mu + e lambda = f
-           has a solution 0 < mu < 1 and 0 < lambda < 1 
+           has a solution 0 < mu < 1 and 0 < lambda < 1
            where a and d are coefficients of the variable mu
            where b and e are coefficients of the variable lambda
            where c and f are constants */
@@ -107,6 +84,29 @@ public class Vertex implements Comparable<Vertex> {
 
       return p.predicate(denominator, lambda_numerator, mu_numerator);
     }
+  }
+
+  public int get_x() {
+    return x;
+  }
+
+  public int get_y() {
+    return y;
+  }
+
+  public int compareTo(Vertex v) {
+    if (v.get_x() == get_x()) {
+      return v.get_y() - get_y();
+    } else {
+      return v.get_x() - get_x();
+    }
+  }
+
+  public boolean equals(Object o) {
+    if (o instanceof Vertex) {
+      Vertex v = (Vertex) o;
+      return compareTo(v) == 0;
+    } else return false;
   }
 
   public String toString() {

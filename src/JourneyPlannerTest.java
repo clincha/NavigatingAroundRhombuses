@@ -24,11 +24,6 @@ class JourneyPlannerTest {
   }
 
   @Test
-  public void listShouldBeLength() {
-    assertEquals(9, journeyPlanner.nextConfigs(new Vertex(5, 5)).size());
-  }
-
-  @Test
   public void AreStartAndFinishCorrect() throws IOException {
     ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
     ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
@@ -58,6 +53,16 @@ class JourneyPlannerTest {
       assertEquals(start, route.get(0));
       assertEquals(finish, route.get(route.size() - 1));
     }
+  }
+
+  @Test
+  public void test() {
+    Vertex vertex = new Vertex(0, 0);
+    Vertex vertex2 = new Vertex(2, 2);
+    Vertex point = new Vertex(0, 2);
+    Vertex point2 = new Vertex(2, 0);
+
+    System.out.println(Vertex.linesIntersect(point, point2, vertex, vertex2));
   }
 
 }
