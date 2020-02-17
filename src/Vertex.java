@@ -1,4 +1,7 @@
+import java.util.Arrays;
+
 public class Vertex implements Comparable<Vertex> {
+  private static final int MAX_X = 25;
   private int x;
   private int y;
 
@@ -84,6 +87,13 @@ public class Vertex implements Comparable<Vertex> {
 
       return p.predicate(denominator, lambda_numerator, mu_numerator);
     }
+  }
+
+  public boolean within(Rhombus rhombus) {
+    long intersectCount = Arrays.stream(rhombus.getLines())
+      .filter(line -> Vertex.linesIntersect(this, new Vertex(MAX_X, this.get_y()), line.getStart(), line.getEnd()))
+      .count();
+    return intersectCount % 2 == 1;
   }
 
   public int get_x() {

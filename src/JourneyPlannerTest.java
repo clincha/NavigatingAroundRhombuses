@@ -11,6 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 class JourneyPlannerTest {
 
@@ -56,13 +58,29 @@ class JourneyPlannerTest {
   }
 
   @Test
-  public void test() {
-    Vertex vertex = new Vertex(0, 0);
-    Vertex vertex2 = new Vertex(2, 2);
-    Vertex point = new Vertex(0, 2);
-    Vertex point2 = new Vertex(2, 0);
+  public void vertexWithinRhombusTest() {
+    Rhombus rhombus = getRhombus();
 
-    System.out.println(Vertex.linesIntersect(point, point2, vertex, vertex2));
+    Vertex vertex = new Vertex(20, 16);
+    assertTrue(vertex.within(rhombus));
+
+    vertex = new Vertex(18, 16);
+    assertFalse(vertex.within(rhombus));
   }
 
+  private Rhombus getRhombus() {
+    Vertex[] vertices = new Vertex[4];
+    vertices[0] = new Vertex(19, 10);
+    vertices[1] = new Vertex(21, 10);
+    vertices[2] = new Vertex(21, 18);
+    vertices[3] = new Vertex(19, 18);
+    return new Rhombus(vertices);
+  }
+
+  @Test
+  public void linesIntersectTest() {
+    Line line = new Line(new Vertex(19, 18), new Vertex(14, 15));
+    Line line1 = new Line(new Vertex(11, 16), new Vertex(20, 16));
+    assertTrue(Vertex.linesIntersect(line.getStart(), line.getEnd(), line1.getStart(), line1.getEnd()));
+  }
 }
