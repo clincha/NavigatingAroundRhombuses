@@ -68,7 +68,7 @@ public class JourneyPlanner {
   private Rhombus[] getRhombuses() {
     Rhombus[] rhombuses = new Rhombus[RHOMBOIDS];
 
-    File rhombusCSV = new File("src/rhombus.csv");
+    File rhombusCSV = new File("data/rhombus.csv");
 
     try {
       BufferedReader bufferedReader = new BufferedReader(new FileReader(rhombusCSV));

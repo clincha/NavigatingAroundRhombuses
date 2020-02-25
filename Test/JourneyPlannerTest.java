@@ -30,7 +30,7 @@ class JourneyPlannerTest {
     ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
     ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
 
-    File puzzles = new File("src/puzzles.csv");
+    File puzzles = new File("data/puzzles.csv");
     BufferedReader bufferedReader = new BufferedReader(new FileReader(puzzles));
 
     String startLine = bufferedReader.readLine();
