@@ -23,4 +23,9 @@ public class Line {
   public void setEnd(Vertex end) {
     this.end = end;
   }
+
+  @Override
+  public String toString() {
+    return start + " --> " + end;
+  }
 }
