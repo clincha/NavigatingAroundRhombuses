@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,12 @@ class JourneyPlannerTest {
   @BeforeEach
   public void setup() {
     journeyPlanner = new JourneyPlanner();
+  }
+
+  @Test
+  public void nextConfigsTest() {
+    List<Vertex> vertices = journeyPlanner.nextConfigs(new Vertex(18, 2));
+    System.out.println(vertices);
   }
 
   @Test
@@ -69,18 +76,18 @@ class JourneyPlannerTest {
   }
 
   private Rhombus getRhombus() {
-    Vertex[] vertices = new Vertex[4];
-    vertices[0] = new Vertex(19, 10);
-    vertices[1] = new Vertex(21, 10);
-    vertices[2] = new Vertex(21, 18);
-    vertices[3] = new Vertex(19, 18);
+    ArrayList<Vertex> vertices = new ArrayList<>(4);
+    vertices.add(new Vertex(19, 10));
+    vertices.add(new Vertex(21, 10));
+    vertices.add(new Vertex(21, 18));
+    vertices.add(new Vertex(19, 18));
     return new Rhombus(vertices);
   }
 
   @Test
   public void linesIntersectTest() {
-    Line line = new Line(new Vertex(19, 18), new Vertex(14, 15));
-    Line line1 = new Line(new Vertex(11, 16), new Vertex(20, 16));
+    Line line = new Line(new Vertex(3, 6), new Vertex(10, 9));
+    Line line1 = new Line(new Vertex(9, 9), new Vertex(11, 6));
     assertTrue(Vertex.linesIntersect(line.getStart(), line.getEnd(), line1.getStart(), line1.getEnd()));
   }
 }

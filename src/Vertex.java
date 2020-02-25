@@ -127,4 +127,10 @@ public class Vertex implements Comparable<Vertex> {
     boolean predicate(int denominator, int lambda_numerator, int mu_numerator);
   }
 
+  @Override
+  public int hashCode() {
+    int result = x;
+    result = 31 * result + y;
+    return result;
+  }
 }
