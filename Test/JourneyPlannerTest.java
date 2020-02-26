@@ -33,6 +33,33 @@ class JourneyPlannerTest {
   }
 
   @Test
+  public void testSpecificPuzzle() throws IOException {
+    ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
+    ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
+
+    File puzzles = new File("data/puzzles.csv");
+    BufferedReader bufferedReader = new BufferedReader(new FileReader(puzzles));
+
+    String startLine = bufferedReader.readLine();
+    String endLine = bufferedReader.readLine();
+
+    Matcher startMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(startLine);
+    Matcher endMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(endLine);
+
+    while (endMatcher.find() && startMatcher.find()) {
+      startVertices.add(new Vertex(Integer.parseInt(startMatcher.group(1)), Integer.parseInt(startMatcher.group(2))));
+      endVertices.add(new Vertex(Integer.parseInt(endMatcher.group(1)), Integer.parseInt(endMatcher.group(2))));
+    }
+    Vertex start = startVertices.get(2);
+    Vertex finish = endVertices.get(2);
+
+    LinkedList<Vertex> route = journeyPlanner.iterativeDeepening(start, finish);
+
+    System.out.println(route);
+  }
+
+
+  @Test
   public void AreStartAndFinishCorrect() throws IOException {
     ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
     ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
@@ -66,13 +93,16 @@ class JourneyPlannerTest {
 
   @Test
   public void vertexWithinRhombusTest() {
-    Rhombus rhombus = getRhombus();
+    Rhombus[] rhombuses = JourneyPlanner.getRhombuses();
+    boolean within = false;
 
-    Vertex vertex = new Vertex(20, 16);
-    assertTrue(vertex.within(rhombus));
+    Vertex inside = new Vertex(15, 12);
 
-    vertex = new Vertex(18, 16);
-    assertFalse(vertex.within(rhombus));
+    for (Rhombus rhombus : rhombuses) {
+      if (inside.within(rhombus))
+        within = true;
+    }
+    assertTrue(within);
   }
 
   private Rhombus getRhombus() {
