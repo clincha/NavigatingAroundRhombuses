@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -62,39 +63,32 @@ class JourneyPlannerTest {
 
   @Test
   public void AreStartAndFinishCorrect() throws IOException {
-    ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
-    ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
+    List<Line> puzzlesArray = new ArrayList<>(PUZZLE_LENGTH);
 
-    File puzzles = new File("data/puzzles.csv");
+    File puzzles = new File("data/puzzles-formatted.csv");
     BufferedReader bufferedReader = new BufferedReader(new FileReader(puzzles));
 
-    String startLine = bufferedReader.readLine();
-    String endLine = bufferedReader.readLine();
-
-    Matcher startMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(startLine);
-    Matcher endMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(endLine);
-
-    while (endMatcher.find() && startMatcher.find()) {
-      startVertices.add(new Vertex(Integer.parseInt(startMatcher.group(1)), Integer.parseInt(startMatcher.group(2))));
-      endVertices.add(new Vertex(Integer.parseInt(endMatcher.group(1)), Integer.parseInt(endMatcher.group(2))));
+    for (String line : bufferedReader.lines()
+      .collect(Collectors.toList())) {
+      Matcher matcher = Pattern.compile("\\((\\d+), (\\d+)\\) --> \\((\\d+), (\\d+)\\)").matcher(line);
+      if (matcher.find()) {
+        puzzlesArray.add(new Line(
+          new Vertex(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))),
+          new Vertex(Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)))));
+      }
     }
 
-    for (int i = 0; i < PUZZLE_LENGTH; i++) {
-      Vertex start = startVertices.get(i);
-      Vertex finish = endVertices.get(i);
-
-      LinkedList<Vertex> route = journeyPlanner.iterativeDeepening(start, finish);
-
+    for (Line puzzle : puzzlesArray) {
+      LinkedList<Vertex> route = journeyPlanner.iterativeDeepening(puzzle.getStart(), puzzle.getEnd());
       System.out.println(route);
-
-      assertEquals(start, route.get(0));
-      assertEquals(finish, route.get(route.size() - 1));
+      assertEquals(puzzle.getStart(), route.get(0));
+      assertEquals(puzzle.getEnd(), route.get(route.size() - 1));
     }
   }
 
   @Test
   public void vertexWithinRhombusTest() {
-    Rhombus[] rhombuses = JourneyPlanner.getRhombuses();
+    Rhombus[] rhombuses = Loader.getRhombuses();
     boolean within = false;
 
     Vertex inside = new Vertex(15, 12);
