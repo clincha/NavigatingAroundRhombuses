@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="557ca504-3ba0-4c8b-842f-d6a4e0a260de" name="Raptor" url="http://raptor.kent.ac.uk">
+        <fileTransfer host="raptor.kent.ac.uk" port="22" rootFolder="/proj/co528c/rhombuses/aglc2" accessType="SFTP" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

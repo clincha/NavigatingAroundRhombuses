@@ -7,7 +7,6 @@ class LoaderTest {
   @Test
   void getRhombuses() {
     assertFalse(Loader.getRhombuses().isEmpty());
-    System.out.println(Loader.getRhombuses());
   }
 
   @Test

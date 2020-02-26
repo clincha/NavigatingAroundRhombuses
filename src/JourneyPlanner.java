@@ -17,7 +17,7 @@ public class JourneyPlanner {
     for (int i = 0; i < puzzles.size(); i++) {
       LinkedList<Vertex> vertices = journeyPlanner.iterativeDeepening(puzzles.get(i).getStart(), puzzles.get(i).getEnd());
       try {
-        FileWriter writer = new FileWriter("solutions/" + (i + 1) + ".txt");
+        FileWriter writer = new FileWriter((i + 1) + ".txt");
         writer.write(
           vertices.stream()
             .map(Vertex::toString)
