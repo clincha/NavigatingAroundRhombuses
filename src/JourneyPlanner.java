@@ -92,8 +92,9 @@ public class JourneyPlanner {
 
         vertices = vertices.stream()
           .filter(vertex -> !Vertex.linesIntersect(state, vertex, line.getStart(), line.getEnd()))
-          .filter(vertex -> !vertex.within(rhombus))
-          .filter(vertex -> !Vertex.vertexIntersect(vertex, rhombus.getOppositeLine(line).getStart(), rhombus.getOppositeLine(line).getEnd()))
+//          .filter(vertex -> !vertex.within(rhombus))
+//          .filter(vertex -> !Vertex.vertexIntersect(vertex, rhombus.getOppositeLine(line).getStart(), rhombus.getOppositeLine(line).getEnd()))
+          .filter(vertex -> !rhombus.passWithin(new Line(vertex, state)))
           .filter(vertex -> !vertex.equals(state))
           .collect(Collectors.toList());
       }

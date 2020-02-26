@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 class JourneyPlannerTest {
@@ -30,6 +29,8 @@ class JourneyPlannerTest {
   public void nextConfigsTest() {
     List<Vertex> vertices = journeyPlanner.nextConfigs(new Vertex(18, 2));
     System.out.println(vertices);
+
+    //[(17, 6), (13, 2), (10, 2), (14, 7), (11, 6), (21, 2), (5, 2)]
   }
 
   @Test

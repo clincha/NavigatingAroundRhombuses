@@ -39,4 +39,11 @@ public class Rhombus {
     vertices.remove(line.getEnd());
     return new Line(vertices.get(0), vertices.get(1));
   }
+
+  public boolean passWithin(Line line) {
+    Line line1 = new Line(vertices.get(0), vertices.get(2));
+    Line line2 = new Line(vertices.get(1), vertices.get(3));
+    return Vertex.linesIntersect(line.getStart(), line.getEnd(), line1.getStart(), line1.getEnd()) ||
+      Vertex.linesIntersect(line.getStart(), line.getEnd(), line2.getStart(), line2.getEnd());
+  }
 }
