@@ -42,8 +42,8 @@ public class JourneyPlanner {
     if (cache.containsKey(state))
       return cache.get(state);
 
-    Rhombus[] obstacles = Loader.getRhombuses();
-    List<Vertex> vertices = Arrays.stream(obstacles)
+    List<Rhombus> obstacles = Loader.getRhombuses();
+    List<Vertex> vertices = obstacles.stream()
       .map(Rhombus::getVertices)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());

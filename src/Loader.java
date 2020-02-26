@@ -2,66 +2,58 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Loader {
 
-  private static final int RHOMBOIDS = 16;
-  private static final int PUZZLE_LENGTH = 12;
-
-  public static Rhombus[] getRhombuses() {
-    Rhombus[] rhombuses = new Rhombus[RHOMBOIDS];
-
-    File rhombusCSV = new File("data/rhombus.csv");
+  public static List<Rhombus> getRhombuses() {
+    List<Rhombus> rhombuses = new ArrayList<>();
 
     try {
-      BufferedReader bufferedReader = new BufferedReader(new FileReader(rhombusCSV));
-      Matcher[] matchers = new Matcher[4];
-      for (int i = 0; i < matchers.length; i++) {
-        matchers[i] = Pattern.compile("(\\d+), (\\d+)").matcher(bufferedReader.readLine());
-      }
-
-      for (int i = 0; i < RHOMBOIDS; i++) {
-        ArrayList<Vertex> rhombusVertices = new ArrayList<>(4);
-        for (int j = 0; j < 4; j++) {
-          if (matchers[j].find()) {
-            rhombusVertices.add(new Vertex(Integer.parseInt(matchers[j].group(1)), Integer.parseInt(matchers[j].group(2))));
+      File obstacles = new File("data/rhombus.csv");
+      BufferedReader bufferedReader = new BufferedReader(new FileReader(obstacles));
+      for (String line : bufferedReader.lines()
+        .collect(Collectors.toList())) {
+        Matcher matcher = Pattern.compile("\\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\)").matcher(line);
+        if (matcher.find()) {
+          List<Vertex> vertices = new ArrayList<>(4);
+          for (int i = 1; i < matcher.groupCount() / 2; i = i + 2) {
+            vertices.add(new Vertex(Integer.parseInt(matcher.group(i)), Integer.parseInt(matcher.group(i + 1))));
           }
+          rhombuses.add(new Rhombus(vertices));
         }
-        rhombuses[i] = new Rhombus(rhombusVertices);
       }
-
-    } catch (IOException e) {
+    } catch (FileNotFoundException e) {
       e.printStackTrace();
+      System.exit(1);
     }
+
     return rhombuses;
   }
 
-  public static Line[] getPuzzles() {
-    try {
-      ArrayList<Vertex> startVertices = new ArrayList<>(PUZZLE_LENGTH);
-      ArrayList<Vertex> endVertices = new ArrayList<>(PUZZLE_LENGTH);
+  static List<Line> getPuzzles() {
+    List<Line> puzzlesArray = new ArrayList<>();
 
+    try {
       File puzzles = new File("data/puzzles.csv");
       BufferedReader bufferedReader = new BufferedReader(new FileReader(puzzles));
-
-      String startLine = bufferedReader.readLine();
-      String endLine = bufferedReader.readLine();
-
-      Matcher startMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(startLine);
-      Matcher endMatcher = Pattern.compile("(\\d+), (\\d+)").matcher(endLine);
-
-      while (endMatcher.find() && startMatcher.find()) {
-        startVertices.add(new Vertex(Integer.parseInt(startMatcher.group(1)), Integer.parseInt(startMatcher.group(2))));
-        endVertices.add(new Vertex(Integer.parseInt(endMatcher.group(1)), Integer.parseInt(endMatcher.group(2))));
+      for (String line : bufferedReader.lines()
+        .collect(Collectors.toList())) {
+        Matcher matcher = Pattern.compile("\\((\\d+), (\\d+)\\) --> \\((\\d+), (\\d+)\\)").matcher(line);
+        if (matcher.find()) {
+          puzzlesArray.add(new Line(
+            new Vertex(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))),
+            new Vertex(Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)))));
+        }
       }
-      return null;
-    } catch (IOException e) {
+    } catch (FileNotFoundException e) {
       e.printStackTrace();
+      System.exit(1);
     }
-    return null;
+    return puzzlesArray;
   }
 }

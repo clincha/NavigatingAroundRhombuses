@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Rhombus {
 
@@ -27,9 +28,11 @@ public class Rhombus {
 
   @Override
   public String toString() {
-    return "Rhombus{" +
-      "vertices=" + vertices +
-      '}';
+    return "(" +
+      vertices.stream()
+        .map(Vertex::toString)
+        .collect(Collectors.joining(", ")) +
+      ")";
   }
 
   public Line getOppositeLine(Line line) {
