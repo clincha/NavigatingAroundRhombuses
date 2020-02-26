@@ -6,10 +6,12 @@ class LoaderTest {
 
   @Test
   void getRhombuses() {
-    Loader.getRhombuses();
+    assertFalse(Loader.getRhombuses().isEmpty());
+    System.out.println(Loader.getRhombuses());
   }
 
   @Test
   void getPuzzles() {
+    assertFalse(Loader.getPuzzles().isEmpty());
   }
 }

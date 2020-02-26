@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,20 +32,5 @@ public class Rhombus {
         .map(Vertex::toString)
         .collect(Collectors.joining(", ")) +
       ")";
-  }
-
-  public Line getOppositeLine(Line line) {
-    List<Vertex> vertices = new ArrayList<>(4);
-    vertices.addAll(this.vertices);
-    vertices.remove(line.getStart());
-    vertices.remove(line.getEnd());
-    return new Line(vertices.get(0), vertices.get(1));
-  }
-
-  public boolean passWithin(Line line) {
-    Line line1 = new Line(vertices.get(0), vertices.get(2));
-    Line line2 = new Line(vertices.get(1), vertices.get(3));
-    return Vertex.linesIntersect(line.getStart(), line.getEnd(), line1.getStart(), line1.getEnd()) ||
-      Vertex.linesIntersect(line.getStart(), line.getEnd(), line2.getStart(), line2.getEnd());
   }
 }

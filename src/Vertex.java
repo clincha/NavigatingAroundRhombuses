@@ -1,47 +1,10 @@
-import java.util.Arrays;
-
 public class Vertex implements Comparable<Vertex> {
-  private static final int MAX_X = 25;
   private int x;
   private int y;
 
   Vertex(int x, int y) {
     this.x = x;
     this.y = y;
-  }
-
-  public static boolean vertexIntersect(Vertex u, Vertex v1, Vertex v2) {
-	/* check whether the vertex u falls within a given line segment where
-           the line segment connects vertices v1 and v2 (but does not include them) */
-
-    int a = v1.get_x() - v2.get_x();
-    int b = u.get_x() - v2.get_x();
-
-    int c = v1.get_y() - v2.get_y();
-    int d = u.get_y() - v2.get_y();
-
-	/* check whether the simultaneous equations a mu = b and c mu = d
-           has a solution 0 < mu < 1
-           where a and c are coefficients of the variable mu
-           where b and d are constants */
-
-    if (a < 0) {
-      a = -a;
-      b = -b;
-    }
-
-    if (c < 0) {
-      c = -c;
-      d = -d;
-    }
-
-    if (a == 0 && b == 0) {
-      return 0 < d && d < c;
-    } else if (c == 0 && d == 0) {
-      return 0 < b && b < a;
-    } else {
-      return 0 < b && b < a && 0 < d && d < c && a * d == b * c;
-    }
   }
 
   public static boolean linesIntersect(Vertex u1, Vertex u2, Vertex v1, Vertex v2) {
@@ -89,13 +52,6 @@ public class Vertex implements Comparable<Vertex> {
     }
   }
 
-  public boolean within(Rhombus rhombus) {
-    long intersectCount = Arrays.stream(rhombus.getLines())
-      .filter(line -> Vertex.linesIntersect(this, new Vertex(MAX_X, this.get_y()), line.getStart(), line.getEnd()))
-      .count();
-    return intersectCount % 2 == 1;
-  }
-
   public int get_x() {
     return x;
   }
@@ -123,14 +79,14 @@ public class Vertex implements Comparable<Vertex> {
     return "(" + x + ", " + y + ")";
   }
 
-  interface Predicate {
-    boolean predicate(int denominator, int lambda_numerator, int mu_numerator);
-  }
-
   @Override
   public int hashCode() {
     int result = x;
     result = 31 * result + y;
     return result;
+  }
+
+  interface Predicate {
+    boolean predicate(int denominator, int lambda_numerator, int mu_numerator);
   }
 }

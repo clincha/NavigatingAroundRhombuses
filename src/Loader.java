@@ -12,7 +12,6 @@ public class Loader {
 
   public static List<Rhombus> getRhombuses() {
     List<Rhombus> rhombuses = new ArrayList<>();
-
     try {
       File obstacles = new File("data/rhombus.csv");
       BufferedReader bufferedReader = new BufferedReader(new FileReader(obstacles));
@@ -21,7 +20,7 @@ public class Loader {
         Matcher matcher = Pattern.compile("\\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\), \\((\\d+), (\\d+)\\)").matcher(line);
         if (matcher.find()) {
           List<Vertex> vertices = new ArrayList<>(4);
-          for (int i = 1; i < matcher.groupCount() / 2; i = i + 2) {
+          for (int i = 1; i < matcher.groupCount(); i = i + 2) {
             vertices.add(new Vertex(Integer.parseInt(matcher.group(i)), Integer.parseInt(matcher.group(i + 1))));
           }
           rhombuses.add(new Rhombus(vertices));
@@ -31,7 +30,6 @@ public class Loader {
       e.printStackTrace();
       System.exit(1);
     }
-
     return rhombuses;
   }
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class FormatChecker {
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
       StringBuilder sb = new StringBuilder();
       String line = br.readLine();
@@ -27,7 +27,7 @@ public class FormatChecker {
 
   public static boolean parse_opening_bracket(StringTokenizer st) {
     if (st.hasMoreTokens()) {
-      String token = st.nextToken(" |0|1|2|3|4|5|6|7|8|9");
+      String token = st.nextToken(" |0123456789");
       if (token.equals("(")) {
         System.out.print("(");
         return parse_x(st);
@@ -50,7 +50,7 @@ public class FormatChecker {
 
   public static boolean parse_comma(StringTokenizer st) {
     if (st.hasMoreTokens()) {
-      String token = st.nextToken(" |0|1|2|3|4|5|6|7|8|9");
+      String token = st.nextToken(" |0123456789");
       if (token.equals(",")) {
         System.out.print(", ");
         return parse_y(st);

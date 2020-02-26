@@ -1,8 +1,7 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,26 @@ import java.util.stream.Collectors;
 
 public class JourneyPlanner {
   private Map<Vertex, List<Vertex>> cache = new HashMap<>();
+
+  public static void main(String[] args) {
+    JourneyPlanner journeyPlanner = new JourneyPlanner();
+    List<Line> puzzles = Loader.getPuzzles();
+
+    for (int i = 0; i < puzzles.size(); i++) {
+      LinkedList<Vertex> vertices = journeyPlanner.iterativeDeepening(puzzles.get(i).getStart(), puzzles.get(i).getEnd());
+      try {
+        FileWriter writer = new FileWriter("solutions/" + (i + 1) + ".txt");
+        writer.write(
+          vertices.stream()
+            .map(Vertex::toString)
+            .collect(Collectors.joining(" ")));
+        writer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        System.exit(1);
+      }
+    }
+  }
 
   public LinkedList<Vertex> iterativeDeepening(Vertex first, Vertex last) {
     for (int depth = 1; true; depth++) {
@@ -42,23 +61,27 @@ public class JourneyPlanner {
     if (cache.containsKey(state))
       return cache.get(state);
 
-    List<Rhombus> obstacles = Loader.getRhombuses();
-    List<Vertex> vertices = obstacles.stream()
+    List<Vertex> targets = Loader.getRhombuses().stream()
+      // Get all the possible targets on the map
       .map(Rhombus::getVertices)
       .flatMap(Collection::stream)
+      // Remove duplicate targets
+      .distinct()
       .collect(Collectors.toList());
 
-    for (Rhombus rhombus : obstacles) {
+    for (Rhombus rhombus : Loader.getRhombuses()) {
       for (Line line : rhombus.getLines()) {
-        vertices = vertices.stream()
+        targets = targets.stream()
+          // Remove the target if the line between state and target intersects the border of the obstacles
           .filter(vertex -> !Vertex.linesIntersect(state, vertex, line.getStart(), line.getEnd()))
-          .filter(vertex -> !rhombus.passWithin(new Line(vertex, state)))
+          // Remove the target if the line between state and target crosses through the middle of the obstacles
+          .filter(vertex -> !new Line(vertex, state).crossInternally(rhombus))
+          // Remove the target if we are on the target
           .filter(vertex -> !vertex.equals(state))
           .collect(Collectors.toList());
       }
     }
-    vertices = new ArrayList<>(new HashSet<>(vertices));
-    cache.put(state, vertices);
-    return vertices;
+    cache.put(state, targets);
+    return targets;
   }
 }
