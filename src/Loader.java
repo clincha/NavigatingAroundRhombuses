@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class Loader {
 
-  public static List<Rhombus> getRhombuses() {
+  static List<Rhombus> getRhombuses() {
     List<Rhombus> rhombuses = new ArrayList<>();
     try {
       File obstacles = new File("data/rhombus.csv");

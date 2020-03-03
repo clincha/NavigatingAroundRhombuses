@@ -75,7 +75,7 @@ public class JourneyPlanner {
           // Remove the target if the line between state and target intersects the border of the obstacles
           .filter(vertex -> !Vertex.linesIntersect(state, vertex, line.getStart(), line.getEnd()))
           // Remove the target if the line between state and target crosses through the middle of the obstacles
-          .filter(vertex -> !new Line(vertex, state).crossInternally(rhombus))
+          .filter(vertex -> !new Line(vertex, state).crossesThrough(rhombus))
           // Remove the target if we are on the target
           .filter(vertex -> !vertex.equals(state))
           .collect(Collectors.toList());

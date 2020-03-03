@@ -5,19 +5,19 @@ public class Rhombus {
 
   private List<Vertex> vertices;
 
-  public Rhombus(List<Vertex> vertices) {
+  Rhombus(List<Vertex> vertices) {
     this.vertices = vertices;
   }
 
-  public List<Vertex> getVertices() {
+  List<Vertex> getVertices() {
     return vertices;
   }
 
-  public void setVertices(List<Vertex> vertices) {
+  void setVertices(List<Vertex> vertices) {
     this.vertices = vertices;
   }
 
-  public Line[] getLines() {
+  Line[] getLines() {
     Line[] lines = new Line[4];
     for (int i = 0; i < 4; i++) {
       lines[i] = new Line(vertices.get(i), vertices.get((i + 1) % 4));
